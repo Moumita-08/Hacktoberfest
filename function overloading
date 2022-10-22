@@ -1,0 +1,25 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+int sum(int x, int y)
+{
+    return x+y;
+}
+
+double sum(double x, double y)
+{
+    return x+y;
+}
+
+int sum (int x, int y, int z)
+{
+    return x+y+z;
+}
+
+int main()
+{
+    cout <<"The Sum of two integers: "<<sum(10, 20)<<endl;
+    cout <<"The Sum of two floats: "<<sum(5.5, 2.7)<<endl;
+    cout <<"The Sum of three integers: "<<sum(10, 20, 30)<<endl;
+    return 0;
+}
