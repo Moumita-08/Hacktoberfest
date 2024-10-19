@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ride-Sharing Service</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background: white;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+
+        h1, h2 {
+            color: #333;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        button {
+            padding: 10px 15px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #218838;
+        }
+
+        .ride-options {
+            margin-top: 20px;
+        }
+
+        .ride-option {
+            padding: 10px;
+            margin: 5px 0;
+            background-color: #e9ecef;
+            border-radius: 4px;
+        }
+
+        .order-summary {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #e9ecef;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Ride Booking</h1>
+        <form id="bookingForm">
+            <div class="form-group">
+                <label for="pickup">Pickup Location:</label>
+                <input type="text" id="pickup" required>
+            </div>
+            <div class="form-group">
+                <label for="dropoff">Drop-off Location:</label>
+                <input type="text" id="dropoff" required>
+            </div>
+            <div class="form-group">
+                <label for="date">Date:</label>
+                <input type="date" id="date" required>
+            </div>
+            <div class="form-group">
+                <label for="time">Time:</label>
+                <input type="time" id="time" required>
+            </div>
+            <div class="form-group">
+                <label for="vehicleType">Vehicle Type:</label>
+                <select id="vehicleType" required>
+                    <option value="car">Car</option>
+                    <option value="bike">Bike</option>
+                    <option value="van">Van</option>
+                </select>
+            </div>
+            <button type="submit">Find Rides</button>
+        </form>
+        
+        <h2>Available Rides</h2>
+        <div id="rideOptions" class="ride-options"></div>
+
+        <h2>Order Summary</h2>
+        <div id="orderSummary" class="order-summary"></div>
+    </div>
+    
+    <script>
+        document.getElementById('bookingForm').addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent form submission
+
+            // Get user input values
+            const pickup = document.getElementById('pickup').value;
+            const dropoff = document.getElementById('dropoff').value;
+            const date = document.getElementById('date').value;
+            const time = document.getElementById('time').value;
+            const vehicleType = document.getElementById('vehicleType').value;
+
+            // Mock ride options
+            const rides = [
+                { driver: 'John', vehicle: 'Toyota Camry', fare: 20, eta: '15 mins', type: 'car' },
+                { driver: 'Doe', vehicle: 'Honda Civic', fare: 22, eta: '10 mins', type: 'car' },
+                { driver: 'Anna', vehicle: 'Yamaha MT-15', fare: 15, eta: '5 mins', type: 'bike' },
+                { driver: 'Sam', vehicle: 'Mercedes V-Class', fare: 35, eta: '20 mins', type: 'van' },
+            ];
+
+            // Filter rides based on vehicle type
+            const availableRides = rides.filter(ride => ride.type === vehicleType);
+
+            // Display available rides
+            const rideOptionsDiv = document.getElementById('rideOptions');
+            rideOptionsDiv.innerHTML = ''; // Clear previous options
+            availableRides.forEach(ride => {
+                const rideDiv = document.createElement('div');
+                rideDiv.classList.add('ride-option');
+                rideDiv.innerHTML = `
+                    <strong>Driver:</strong> ${ride.driver}<br>
+                    <strong>Vehicle:</strong> ${ride.vehicle}<br>
+                    <strong>Fare:</strong> $${ride.fare}<br>
+                    <strong>ETA:</strong> ${ride.eta}<br>
+                    <button class="select-ride" data-fare="${ride.fare}" data-vehicle="${ride.vehicle}" data-driver="${ride.driver}">Select Ride</button>
+                `;
+                rideOptionsDiv.appendChild(rideDiv);
+            });
+
+            // Add event listeners to select ride buttons
+            document.querySelectorAll('.select-ride').forEach(button => {
+                button.addEventListener('click', function() {
+                    const fare = this.getAttribute('data-fare');
+                    const vehicle = this.getAttribute('data-vehicle');
+                    const driver = this.getAttribute('data-driver');
+                    displayOrderSummary(driver, vehicle, fare);
+                });
+            });
+        });
+
+        // Function to display order summary
+        function displayOrderSummary(driver, vehicle, fare) {
+            const orderSummaryDiv = document.getElementById('orderSummary');
+            orderSummaryDiv.innerHTML = `
+                <strong>Selected Ride:</strong><br>
+                Driver: ${driver}<br>
+                Vehicle: ${vehicle}<br>
+                Fare: $${fare}
+            `;
+        }
+    </script>
+</body>
+</html>
